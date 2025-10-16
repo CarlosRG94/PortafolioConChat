@@ -1,0 +1,170 @@
+﻿/* === Chat flotante tipo ChatGPT === */
+#chat-widget {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    font-family: "Segoe UI", sans-serif;
+}
+
+#chat-toggle {
+    background-color: #238636;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    font-size: 24px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+    #chat-toggle:hover {
+        background-color: #2ea043;
+        transform: scale(1.05);
+    }
+
+/* Ventana de chat flotante */
+#chat-popup {
+    position: fixed;
+    bottom: 90px;
+    right: 20px;
+    width: 90%; /* ancho relativo al viewport */
+    max-width: 380px; /* no se haga más grande que en escritorio */
+    height: 70%; /* altura relativa al viewport */
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+    #chat-popup.hidden {
+        display: none !important;
+    }
+
+#chat-header {
+    background-color: #21262d;
+    color: #e6edf3;
+    text-align: center;
+    font-weight: 600;
+    padding: 12px;
+    border-bottom: 1px solid #30363d;
+}
+
+#chat-messages {
+    flex-grow: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    background-color: #0d1117;
+    scroll-behavior: smooth;
+}
+
+.user-message, .bot-message {
+    max-width: 90%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    line-height: 1.4;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #238636;
+    color: white;
+}
+
+.bot-message {
+    align-self: flex-start;
+    background-color: #21262d;
+    color: #e6edf3;
+}
+
+/* Escribiendo... */
+.typing-indicator {
+    align-self: flex-start;
+    background-color: #21262d;
+    border-radius: 10px;
+    padding: 8px 12px;
+}
+
+.typing-dots {
+    width: 5px;
+    height: 5px;
+    background-color: #e6edf3;
+    border-radius: 50%;
+    margin: 0 2px;
+    display: inline-block;
+    opacity: 0.4;
+    animation: blink 1.4s infinite both;
+}
+
+    .typing-dots:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .typing-dots:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+@keyframes blink {
+    0%, 80%, 100% {
+        opacity: 0.4;
+    }
+
+    40% {
+        opacity: 1;
+    }
+}
+
+#chat-input-area {
+    display: flex;
+    border-top: 1px solid #30363d;
+    background-color: #161b22;
+    padding: 8px;
+}
+
+#chat-input {
+    flex-grow: 1;
+    background-color: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 8px;
+    color: #e6edf3;
+}
+
+#chat-send {
+    background-color: #238636;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    margin-left: 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* === Media Queries para dispositivos pequeños === */
+@media (max-width: 480px) {
+    #chat-popup {
+        width: 95%;
+        max-width: none;
+        height: 80%;
+        max-height: none;
+        bottom: 80px;
+        right: 2.5%;
+    }
+
+    #chat-toggle {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+}

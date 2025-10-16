@@ -1,0 +1,81 @@
+﻿@model IEnumerable<Proyecto>
+
+@if (Model != null)
+{
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+           @foreach(var proyecto in Model)
+{
+    var modalId = proyecto.Titulo.Replace(" ", "").Replace(".","").Replace("#","");
+
+    <div class="col">
+        <div class="card h-100 proyecto-card">
+            @if (!string.IsNullOrEmpty(proyecto.VideoURL))
+            {
+                // Asegura que el enlace sea el embed, no el normal de YouTube
+                var embedUrl = proyecto.VideoURL
+                    .Replace("watch?v=", "embed/")
+                    .Replace("youtu.be/", "www.youtube.com/embed/");
+
+                <div class="ratio ratio-16x9">
+                    <iframe 
+                        class="card-img-top" 
+                        src="@embedUrl" 
+                        title="Video del proyecto" 
+                        allowfullscreen>
+                    </iframe>
+                </div>
+            }
+            else
+            {
+                <img src="@proyecto.ImagenURL" class="card-img-top" alt="Imagen proyecto"/>
+            }
+
+            <div class="card-body">
+                <h5 class="card-title">@proyecto.Titulo</h5>
+                <p class="card-text">
+                    @if(proyecto.Descripcion.Length > 120)
+                    {
+                        @(proyecto.Descripcion.Substring(0,120) + "...") 
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#@modalId">Ver más</a>
+                    }
+                    else
+                    {
+                        @proyecto.Descripcion
+                    }
+                </p>
+            </div>
+
+            @if (!string.IsNullOrEmpty(proyecto.Link))
+            {
+                <div class="card-footer">
+                    <a class="btn btn-primary" href="@proyecto.Link" target="_blank" rel="noopener noreferrer">Visitar</a>
+                </div>
+            }
+
+            @if(proyecto.Descripcion.Length > 120)
+            {
+                <div class="modal fade" id="@modalId" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title">@proyecto.Titulo</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <p>@proyecto.Descripcion</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            }
+        </div>
+    </div>
+}
+        </div>
+    </div>
+}
+
+
+    
+

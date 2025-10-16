@@ -1,0 +1,153 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Portafolio</title>
+
+    <!-- Bootstrap y estilos -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Portafolio.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/chatbot.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+</head>
+
+<body>
+    <!-- ===============================
+         🔝 NAVBAR OSCURA MODERNA
+    ================================== -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark shadow-sm mb-3">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold text-light" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-code-slash text-success"></i> Portafolio
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <button id="theme-toggle" class="btn btn-sm ms-3 text-light border border-success rounded-pill">
+                        <i class="bi bi-moon-fill"></i>
+                </button>
+
+
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-end">
+                    <ul class="navbar-nav">
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="bi bi-house-door"></i> Inicio
+                            </a>
+                        </li>
+                        <li class="nav-item mx-2">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Proyectos">
+                                <i class="bi bi-kanban"></i> Proyectos
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ===============================
+         💡 CONTENIDO PRINCIPAL
+    ================================== -->
+    <div class="container-fluid px-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <!-- ===============================
+         🦶 FOOTER OSCURO MODERNO
+    ================================== -->
+    <footer class="mt-5">
+        <div class="container text-center">
+            <p class="mb-1 fecha">&copy; @DateTime.Now.Year - Portafolio</p>
+            <p>
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a> |
+                <a href="https://github.com/CarlosRG94" target="_blank" rel="noopener">GitHub</a> |
+                <a href="mailto:carloskarso@gmail.com">Contacto</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- ===============================
+         💬 CHATBOT (opcional)
+    ================================== -->
+    <div id="chat-widget">
+        <button id="chat-toggle">💬</button>
+
+        <div id="chat-popup" class="hidden">
+            <div id="chat-header">Chatbot</div>
+            <div id="chat-messages"></div>
+            <div id="chat-input-area">
+                <input type="text" id="chat-input" placeholder="Pregunta lo que quieras sobre mí..." />
+                <button id="chat-send">Enviar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===============================
+         📜 SCRIPTS
+    ================================== -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/chatbot.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- Animación de habilidades -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const habilidades = document.querySelectorAll(".habilidades");
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target); // solo una vez
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            habilidades.forEach(hab => observer.observe(hab));
+        });
+    </script>
+    <script>
+            document.addEventListener("DOMContentLoaded", () => {
+                const toggleButton = document.getElementById("theme-toggle");
+                const body = document.body;
+
+                // Detectar si ya se guardó un modo anterior
+                if (localStorage.getItem("theme") === "light") {
+                    body.classList.add("light-mode");
+                    toggleButton.innerHTML = '<i class="bi bi-sun-fill text-dark"></i>';
+                }
+
+                toggleButton.addEventListener("click", () => {
+                    const isLight = body.classList.toggle("light-mode");
+
+                    // Cambiar ícono dinámicamente
+                    toggleButton.innerHTML = isLight
+                        ? '<i class="bi bi-sun-fill text-dark"></i>'
+                        : '<i class="bi bi-moon-fill text-light"></i>';
+                    localStorage.setItem("theme", isLight ? "light" : "dark");
+
+                    // 🔧 Forzar repintado inmediato de las tarjetas visibles
+                    requestAnimationFrame(() => {
+                        document.querySelectorAll('.habilidades.visible').forEach(card => {
+                            card.style.opacity = '1';
+                            card.style.transform = 'translateY(0)';
+                            card.style.visibility = 'visible';
+                        });
+                    });
+                });
+            });
+    </script>
+</body>
+</html>
+
